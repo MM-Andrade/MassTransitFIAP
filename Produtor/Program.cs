@@ -11,19 +11,19 @@ builder.Services.AddSwaggerGen();
 
 
 var configuration = builder.Configuration;
-var servidor = configuration.GetSection("MassTransit")["Servidor"] ?? string.Empty;
-var usuario = configuration.GetSection("MassTransit")["Usuario"] ?? string.Empty;
-var senha = configuration.GetSection("MassTransit")["Senha"] ?? string.Empty;
+//var servidor = configuration.GetSection("MassTransit")["Servidor"] ?? string.Empty;
+//var usuario = configuration.GetSection("MassTransit")["Usuario"] ?? string.Empty;
+//var senha = configuration.GetSection("MassTransit")["Senha"] ?? string.Empty;
+
+
+var conexao = configuration.GetSection("MassTransitAzure")["Conexao"] ?? string.Empty;
+
 
 builder.Services.AddMassTransit(x =>
 {
-    x.UsingRabbitMq((context, cfg) =>
+    x.UsingAzureServiceBus((context, cfg) =>
     {
-        cfg.Host(servidor, "/", h =>
-        {
-            h.Username(usuario);
-            h.Password(senha);
-        });
+        cfg.Host(conexao);
     });
 });
 
