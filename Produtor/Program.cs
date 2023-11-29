@@ -1,3 +1,4 @@
+using Core;
 using MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,9 +12,6 @@ builder.Services.AddSwaggerGen();
 
 
 var configuration = builder.Configuration;
-//var servidor = configuration.GetSection("MassTransit")["Servidor"] ?? string.Empty;
-//var usuario = configuration.GetSection("MassTransit")["Usuario"] ?? string.Empty;
-//var senha = configuration.GetSection("MassTransit")["Senha"] ?? string.Empty;
 
 
 var conexao = configuration.GetSection("MassTransitAzure")["Conexao"] ?? string.Empty;
@@ -24,6 +22,13 @@ builder.Services.AddMassTransit(x =>
     x.UsingAzureServiceBus((context, cfg) =>
     {
         cfg.Host(conexao);
+
+        cfg.Message<Pedido>(x =>
+        {
+            x.SetEntityName("Topico");
+        });
+
+
     });
 });
 

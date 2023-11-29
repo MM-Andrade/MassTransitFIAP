@@ -21,11 +21,12 @@ namespace Produtor.Controllers
         [HttpPost]
         public async Task<IActionResult> Post()
         {
-            var nomeFila = _configuration.GetSection("MassTransitAzure")["NomeFila"] ?? string.Empty;
-            var endpoint = await _bus.GetSendEndpoint(new Uri($"queue:{nomeFila}"));
+            //var nomeFila = _configuration.GetSection("MassTransitAzure")["NomeFila"] ?? string.Empty;
+            //var endpoint = await _bus.GetSendEndpoint(new Uri($"queue:{nomeFila}"));
+            //await endpoint.Send(new Pedido(1, new Usuario(5,"Marcelo","marcelo@teste.com")));
 
+            await _bus.Publish(new Pedido(1, new Usuario(5, "Marcelo", "marcelo@topico.com")));
 
-            await endpoint.Send(new Pedido(1, new Usuario(5,"Marcelo","marcelo@teste.com")));
 
             return Ok();
         }

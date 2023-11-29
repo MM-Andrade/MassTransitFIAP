@@ -7,7 +7,7 @@ builder.Services.AddHostedService<Worker>();
 
 var configuration = builder.Configuration;
 var fila = configuration.GetSection("MassTransitAzure")["NomeFila"] ?? string.Empty;
-var topico = configuration.GetSection("MassTransitAzure")["NomeTopico"] ?? string.Empty;
+var topico = configuration.GetSection("MassTransitAzure")["Topico"] ?? string.Empty;
 var conexao = configuration.GetSection("MassTransitAzure")["Conexao"] ?? string.Empty;
 
 
@@ -17,12 +17,10 @@ builder.Services.AddMassTransit(x =>
     {
         cfg.Host(conexao);
 
-       cfg.ReceiveEndpoint(fila, e =>
-       {
-           e.Consumer<PedidoCriadoConsumidor>();
-           //e.PrefetchCount = 16;
-
-       });
+        cfg.SubscriptionEndpoint("sub-1", topico, e =>
+        {
+            e.Consumer<PedidoCriadoConsumidor>();
+        });
 
     });
 });
